@@ -1,4 +1,4 @@
-﻿import fileinput #for reading large files
+import fileinput #for reading large files
 import json
 import random
 import numpy as np
@@ -9,9 +9,8 @@ import math
 from datetime import datetime
 import argparse as argp
 from decimal import Decimal
-import scipy.sparse as spar
-import sklearn.manifold as mani
-import py_compile
+
+
 
 
 ##region parse command-line args

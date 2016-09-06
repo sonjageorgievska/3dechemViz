@@ -13,7 +13,6 @@ import scipy.sparse as spar
 import sklearn.manifold as mani
 import py_compile
 
-py_compile.compile('PythonApplication1.py')
 
 ##region parse command-line args
 #parser = argp.ArgumentParser(

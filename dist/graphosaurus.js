@@ -71939,7 +71939,7 @@ module.exports = (function () {
                 this.camera.updateProjectionMatrix();
             }
             else {
-                this.camera.near = 0.1;
+                this.camera.near = 0.01;//XXXXXXXXXXXXXXXXXXXXXX
                 this.camera.far = boundingSphere.radius * 2;
                 this.camera.updateProjectionMatrix();
             }

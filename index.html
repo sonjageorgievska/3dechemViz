@@ -211,12 +211,12 @@
 
         function InitializeGraph() {
             return G.graph({
-                sizeAttenuation: true,//whether to change the size of the nodes for a 3D effect or not
+                sizeAttenuation: false,//whether to change the size of the nodes for a 3D effect or not
                 nodeImage: "imgs/disc.png",
                 nodeImageTransparent: true,
                 antialias: true,
                 bgColor: 'lightgrey',//'lightskyblue',
-                nodeSize: 0.016,//change to 1 if sizeAttenuation = false, otherwise the nodes are too small and not visible
+                nodeSize: 10,//0.016,//change to 1 if sizeAttenuation = false, otherwise the nodes are too small and not visible
                 // AK 02/06/2016: hover->mousedown and disable second mousedown
                 edgeWidth: 0.005,//change to 1 if sizeAttenuation = false
                 hover: function (node) {//what should happen when a user hovers over a node with the mouse

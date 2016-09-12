@@ -50,7 +50,7 @@ def ReadEdgesProcessAndWriteEdgesToFile(inputFile, outputFile):
     print("Processing...") 
     for i in range(0, len(edgesList)):
         sim = edgesList[i][2]
-        edgesList[i][2] = max(-math.log2(sim), 0) #turning similarities into distances with log. They should be non-negative, max(x,0) is there just in case
+        edgesList[i][2] = max(-math.log(sim, 2), 0) #turning similarities into distances with log. They should be non-negative, max(x,0) is there just in case
         maxim = max(maxim, edgesList[i][2])
     for i in range(0, len(edgesList)):
         edgesList[i][2] = edgesList[i][2]/maxim #normalizing distances to be from 0 to 1

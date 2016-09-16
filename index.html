@@ -70,9 +70,11 @@
     <!--UI components-->
     <fieldset class="fieldset-auto-width" style="font: 15px Arial">
         <legend style=" font: 15px Arial">Search by id, name, category, etc... </legend>
-        <p> </p>
+        
         <input type="text" name="search" id="search" class="textbox" />
         <button style=" font: 14px Arial" onclick="searchSequence()" name="button">Search</button>
+        <br><br> <text style=" font: 12px Arial" >Example: x OR y AND NOT z <br> x, y and z are regular expressions. <br>
+         NOT has the highest priority, OR the lowest. </text>  
     </fieldset>
     <p> </p> <p> </p>
     <fieldset class="fieldset-auto-width" style="font: 15px Arial">
@@ -89,8 +91,11 @@
         <p> </p>
         <input type="checkbox" name="sizeattenuation" id="sizeattenuation" />
         <label style=" font: 15px Arial"> Point size attenuation </label>
+        <text style=" font: 12px Arial">
+           <br> Uncheck to zoom-in into a dense region
+        </text>
 
-        <p> </p>
+      
     </fieldset>
     <p> </p>
     <div id="frame"></div>
@@ -111,6 +116,7 @@
     <link rel="stylesheet" type="text/css" href="src/dhtmlx.css">
     <script src="src/dhtmlx.js"></script>
     <script src="dist/graphosaurus.js"></script>
+    <script src="src/search.js"></script>
     <script src="src/uifunctions.js"></script>
     <script src="data/MetaData.js"></script>
     <script charset="4">
@@ -150,7 +156,8 @@
         var selectedPropertyIndex;//holds the index of the most recently selected numerical property (by the user)
         var previousColor = [];//used in resume colors
         //var expandable = new Object();//expandable[5987][3] is true if and only if node with id 5987 is expandable at level 3
-        
+        var priority = DefinePrioritiesOfOperators();
+        var searchExprWellDefined;
         //################# global variables definitions end here
 
         //################# global code starts here
@@ -183,8 +190,7 @@
             //var sliderValue = totalNumberOfLevels - 2;
             //if (sliderValue < 0) { sliderValue = 0;}
             //mySlider.setValue(sliderValue);
-            //showedges.checked = true;
-            sizeattenuation.checked = true;
+            //showedges.checked = true;            
             //LoadData();
         });
         
@@ -197,24 +203,28 @@
         function InitDrawing() {
             //this requests the file and executes a callback with the parsed result once
             // it is available. Calling the level zero
-            var filename = dataFolder + "/" + smallDataFile;
-            fetchJSONFile(filename, function (data) {
-                // do something with your data
-                //totalNumberOfLevels = FindTotalNumberOfLevels(data);
-                //if (bigData == false) {
-                //    mySlider.setMax(totalNumberOfLevels - 1);
-                //}
-                //AddLevelZero(data);
-                LoadData();
-                renderFrame = graph.renderIn("frame");
-                redrawInitialScene();
+            //var filename = dataFolder + "/" + smallDataFile;
+            //fetchJSONFile(filename, function (data) {
+            //    // do something with your data
+            //    //totalNumberOfLevels = FindTotalNumberOfLevels(data);
+            //    //if (bigData == false) {
+            //    //    mySlider.setMax(totalNumberOfLevels - 1);
+            //    //}
+            //    //AddLevelZero(data);
+            //    LoadData();
+            //    renderFrame = graph.renderIn("frame");
+            //    redrawInitialScene();
                
-            });            
+            //});
+            LoadData();
+            renderFrame = graph.renderIn("frame");
+            redrawInitialScene();
         }
 
         function InitEventHandlers() {
             //document.onkeydown = KeyPress;//see src/uifunctions.js. This function is for handling ctrl+z events
-            sizeAtShow.checked = true; //hide edges by default
+            sizeAtShow.checked = true;
+            //edgesShow.checked = false//
             //edgesShow.onchange = function () {
             //    redrawSameScene();
             //}
@@ -647,38 +657,39 @@
             redrawSameScene();
         }
 
-        function SearchAndColorizeByName(name)//searches the nodes that are already loaded in the graph. Means if you color while still loading data, the new data will not be colored
-        {
-            var count = 0;
-            var singleNode;
-            var nodes = graph.getNodes();
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                var found = false;
-                var nodeId = node.getId();
-                nodeId = nodeId.toLowerCase();
-                name = name.toLowerCase();
-                if (nodeId.search(name) > -1) {
-                    found = true;
-                }
-                else {
-                    var categories = node._categoriesValues;
-                    for (var j = 0; j < categories.length; j++) {
-                        var prop = categories[j].toLowerCase();
-                        if (prop.search(name) > -1) { found = true; }
-                    }
-                }
-                if (found) {
-                    ChangeColor(node, "red");
-                    singleNode = node;
-                    count++;
-                }
-                else { ChangeColor(node, "lightgrey"); }
-            }
-            redrawSameScene();
-            alert("Number of selected data points: " + count); //AK 02/06/2016
-        }
+        //function SearchAndColorizeByNameOld(name)//searches the nodes that are already loaded in the graph. Means if you color while still loading data, the new data will not be colored
+        //{
+        //    var count = 0;
+        //    var singleNode;
+        //    var nodes = graph.getNodes();
+        //    for (var i = 0; i < nodes.length; i++) {
+        //        var node = nodes[i];
+        //        var found = false;
+        //        var nodeId = node.getId();
+        //        nodeId = nodeId.toLowerCase();
+        //        name = name.toLowerCase();
+        //        if (nodeId.search(name) > -1) {
+        //            found = true;
+        //        }
+        //        else {
+        //            var categories = node._categoriesValues;
+        //            for (var j = 0; j < categories.length; j++) {
+        //                var prop = categories[j].toLowerCase();
+        //                if (prop.search(name) > -1) { found = true; }
+        //            }
+        //        }
+        //        if (found) {
+        //            ChangeColor(node, "red");
+        //            singleNode = node;
+        //            count++;
+        //        }
+        //        else { ChangeColor(node, "lightgrey"); }
+        //    }
+        //    redrawSameScene();
+        //    alert("Number of selected data points: " + count); //AK 02/06/2016
+        //}
 
+        
         function redrawSameScene() {
             //if (edgesShow.checked) {
             //    ShowAllEdges();
@@ -692,53 +703,53 @@
             else { renderFrame.reDrawMeInSameSceneWithoutSizeAttenuation();}
         }
 
-        function redrawInitialScene() {
-            //if (edgesShow.checked) {
-            //    ShowAllEdges();
+            function redrawInitialScene() {
+                //if (edgesShow.checked) {
+                //    ShowAllEdges();
+                //}
+                //else {
+                //    HideAllEdges();
+                //}
+                if (size_attenuation) {
+                    renderFrame.reDrawMe();
+                }
+                else { renderFrame.reDrawMeWithoutSizeAttenuation(); }
+            }
+
+            function ChangeColor(node, color) {
+                var id = node.getId();
+                previousColor[id] = node.getColor();
+                node.setColor(color);
+            }
+
+            function ReturnPreviousColor(node) {
+                var id = node.getId();
+                var color = previousColor[id];
+                if (color != undefined) {
+                    node.setColorHex("#" + color);
+                }
+            }
+
+            function ReturnAllColors() {
+                var nodes = graph.getNodes();
+                for (var i = 0; i < nodes.length; i++) {
+                    ReturnPreviousColor(nodes[i]);
+                }
+                redrawSameScene();
+            }
+
+            //function ShowExpandableNodes() {
+            //    var nodes = graph.getNodes();
+            //    for (var i = 0; i < nodes.length; i++) {
+            //        var node = nodes[i];
+            //        if (node._expandable) {
+            //            ChangeColor(node, "yellow");
+            //        }
+            //        else { ChangeColor(node, "grey") };
+            //    }
+            //    redrawSameScene();
             //}
-            //else {
-            //    HideAllEdges();
-            //}
-            if (size_attenuation) {
-                renderFrame.reDrawMe();
-            }
-            else { renderFrame.reDrawMeWithoutSizeAttenuation(); }
-        }
-
-        function ChangeColor(node, color) {
-            var id = node.getId();
-            previousColor[id] = node.getColor();
-            node.setColor(color);
-        }
-
-        function ReturnPreviousColor(node) {
-            var id = node.getId();
-            var color = previousColor[id];
-            if (color != undefined) {
-                node.setColorHex("#" + color);
-            }
-        }
-
-        function ReturnAllColors() {
-            var nodes = graph.getNodes();
-            for (var i = 0; i < nodes.length; i++) {
-                ReturnPreviousColor(nodes[i]);
-            }
-            redrawSameScene();
-        }
-
-        //function ShowExpandableNodes() {
-        //    var nodes = graph.getNodes();
-        //    for (var i = 0; i < nodes.length; i++) {
-        //        var node = nodes[i];
-        //        if (node._expandable) {
-        //            ChangeColor(node, "yellow");
-        //        }
-        //        else { ChangeColor(node, "grey") };
-        //    }
-        //    redrawSameScene();
-        //}
-        //################## the functions definitions end here
+            //################## the functions definitions end here
     </script>
 </body>
 </html>

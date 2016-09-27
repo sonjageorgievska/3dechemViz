@@ -1,5 +1,6 @@
 function SearchAndColorizeByExpression(expression)//searches the nodes that are already loaded in the graph. Means if you color while still loading data, the new data will not be colored
 {
+            foundNodes = [];
             searchExprWellDefined = true;
             var count = 0;
             var nodes = graph.getNodes();
@@ -9,6 +10,7 @@ function SearchAndColorizeByExpression(expression)//searches the nodes that are 
                 if (sat) {
                     ChangeColor(node, "red");
                     count++;
+                    foundNodes.push(node);
                 }
                 else { ChangeColor(node, "lightgrey"); }               
             }

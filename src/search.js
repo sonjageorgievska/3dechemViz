@@ -14,6 +14,9 @@ function SearchAndColorizeByExpression(expression)//searches the nodes that are 
                 }
                 else { ChangeColor(node, "lightgrey"); }               
             }
+            if (show_found_nodes.checked) {
+                LoadOnlyFoundNodes();
+            }
             redrawSameScene();
             if (searchExprWellDefined) {
                 alert("Number of selected data points: " + count); //AK 02/06/2016

@@ -57,7 +57,15 @@
             top: 25;
             left: 305;
             z-index: 1;
-            color: black;
+            color: darkblue;
+            font-family: sans-serif;
+        }
+        #labelsearch {
+            position: absolute;
+            bottom: 5;
+            left: 305;
+            z-index: 1;
+            color: darkblue;
             font-family: sans-serif;
         }
     </style>
@@ -79,9 +87,11 @@
     <fieldset class="fieldset-auto-width" style="font: 15px Arial">
         <legend style=" font: 15px Arial">Search by id, name, category, etc... </legend>
         
-        <input type="text" name="search" id="search" class="textbox" />
+        <input type="text" name="search" id="search" class="textbox" onclick="empty_notification()" />
         <button style=" font: 14px Arial" onclick="searchSequence()" name="button">Search</button>
-        <br><br> <text style=" font: 12px Arial" >Example: x OR y AND NOT z <br> x, y and z are regular expressions. <br>
+        <br>
+        <label style=" font: 12px Arial; color: darkred" id="label_search2"></label>
+        <br> <text style=" font: 12px Arial" >Example: x OR y AND NOT z <br> x, y and z are regular expressions. <br>
          NOT has the highest priority, OR the lowest. </text>  
         <p> </p>
         <input type="checkbox" name="show_found_nodes" id="show_found_nodes" />
@@ -107,13 +117,14 @@
         </text>
         <p> </p>
         <input type="checkbox" name="show_popup" id="show_popup" />
-        <label style=" font: 15px Arial"> Show point info on hover </label>
+        <label style=" font: 15px Arial"> Show point info in popup </label>
         
       
     </fieldset>
     <p> </p>
     <div id="frame"></div>
     <div id="label" style=" font: 12px Arial ; color: darkblue"></div>
+    <div id="labelsearch" style=" font: 12px Arial ; color: darkblue"></div>
     <div id="sliderObj" min="0" step="1" value="0" vertical="false" size="245"></div>
     <div id="labelproperty2" style=" font: 15px Arial">Hover over a point to see its information. Right-click to rotate, right-click again to stop a rotation.</div>
     <div>

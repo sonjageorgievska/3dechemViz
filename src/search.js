@@ -1,5 +1,6 @@
 function SearchAndColorizeByExpression(expression)//searches the nodes that are already loaded in the graph. Means if you color while still loading data, the new data will not be colored
 {
+    $("#labelsearch").text("")
             foundNodes = [];
             searchExprWellDefined = true;
             var count = 0;
@@ -19,8 +20,10 @@ function SearchAndColorizeByExpression(expression)//searches the nodes that are 
             }
             redrawSameScene();
             if (searchExprWellDefined) {
-                alert("Number of selected data points: " + count); //AK 02/06/2016
-            } else { alert("Search expression is not well defined"); }
+                //alert("Number of selected data points: " + count); //AK 02/06/2016
+               // $("#labelsearch").text("Number of points found: " + count);
+                $("#label_search2").text("Number of points found: " + count);
+            } else { $("#label_search2").text("Search expression is not well defined!"); }
 
         }
 
@@ -140,3 +143,5 @@ function SearchAndColorizeByExpression(expression)//searches the nodes that are 
                 return false;
             }            
         }
+
+        function empty_notification() { $("#label_search2").text(" "); }
